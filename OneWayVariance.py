@@ -10,6 +10,7 @@ import seaborn as sns
 import scipy.stats as stats
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
+import researchpy as rp
 
 # First the data is loaded
 RUL_Pred = pd.read_csv("Data.csv")
@@ -34,6 +35,8 @@ print("-"*100)
 print(RUL_Pred.describe())
 print("-"*100)
 print(RUL_Pred["Source"].value_counts())
+print("-"*100)
+print(rp.summary_cont(RUL_Pred["RUL"].groupby(RUL_Pred["Source"])))
 
 
 # We then do a few plots of the data, I chose to use the seaborn library for this.
@@ -49,13 +52,6 @@ plt.close()
 
 
 # Then we conduct a one way analysis of variance
-model = stats.f_oneway(RUL_Pred["RUL"][RUL_Pred["Source"] == "Actual"],
-                       RUL_Pred["RUL"][RUL_Pred["Source"] == "LSTM"],
-                       RUL_Pred["RUL"][RUL_Pred["Source"] == "Linear"])
-
-print("-"*100)
-print(model)
-
 model2 = ols("RUL ~ C(Source)", data=RUL_Pred).fit()
 anova_table = sm.stats.anova_lm(model2, typ=2)
 print("-"*100)
@@ -63,6 +59,8 @@ print(anova_table)
 # It seems that there is a statistical significance between the actual RUL and the predictions
 # We must remember to check the model assumptions first though
 # The model assumes independence between the observations, normality of the data and homogenity of variance
+
+# TODO: Is it an independence problem that each engine has a RUL in each group?
 
 # We use a qqplot to check the normality of the data
 stats.probplot(model2.resid, plot=plt)
