@@ -2,7 +2,6 @@
 # there is a statistical significance between the actual RUL and either of the two predictions
 # !!Assumtions: There is an equal amount of Actual RULs and predictions for each model
 
-from operator import index
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
