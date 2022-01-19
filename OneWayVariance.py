@@ -14,7 +14,7 @@ import researchpy as rp
 
 # First the data is loaded
 RUL_Pred = pd.read_csv("Data.csv")
-# test
+
 # The data in its current form is not appropriate for a one way analysis of variance
 # It needs to be transformed to having a categorical explanitory variable
 # TODO: Make this dataframe be able to take different amounts of actual RULs and predictions.
