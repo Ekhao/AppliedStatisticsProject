@@ -2,3 +2,4 @@ venv/*
 Figures/*
 .DS_Store
 Questions.txt
+__pycache__/*
