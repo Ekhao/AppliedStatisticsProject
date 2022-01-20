@@ -2,6 +2,7 @@
 # there is a statistical significance between the actual RUL and either of the two predictions
 # !!Assumtions: There is an equal amount of Actual RULs and predictions for each model
 
+import sys
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -26,6 +27,8 @@ RUL_Pred = pd.DataFrame(
 RUL_Pred = RUL_Pred.set_index("Index")
 RUL_Pred["Source"] = RUL_Pred["Source"].astype("category")
 
+RUL_Pred["log_RUL"] = np.log10(RUL_Pred["RUL"].apply(lambda x: x if x > 1 else 1))
+
 # Then we investigate the data first by looking at it and printing summary information
 print(RUL_Pred.head())
 print("-"*100)
@@ -49,6 +52,14 @@ sns.stripplot(data=RUL_Pred, x="Source", y="RUL")
 plt.savefig("Figures/OneWayVariance/StripPlot")
 plt.close()
 
+# The same charts on the log transfored data
+sns.boxplot(data=RUL_Pred, x="Source", y="log_RUL")
+plt.savefig("Figures/OneWayVariance/LogBoxPlot.png")
+plt.close()
+
+sns.stripplot(data=RUL_Pred, x="Source", y="log_RUL")
+plt.savefig("Figures/OneWayVariance/LogStripPlot")
+plt.close()
 
 # Then we conduct a one way analysis of variance
 model2 = ols("RUL ~ C(Source)", data=RUL_Pred).fit()
@@ -59,7 +70,7 @@ print(anova_table)
 # We must remember to check the model assumptions first though
 # The model assumes independence between the observations, normality of the data and homogenity of variance
 
-# TODO: Is it an independence problem that each engine has a RUL in each group?
+# It is an independence problem that each engine has a RUL in each group. One tries to predict the other.
 
 # We use a qqplot to check the normality of the data
 stats.probplot(model2.resid, plot=plt)
@@ -76,6 +87,4 @@ print(levene)
 # The levenes test is statistically significant which indicates that the groups do in fact not have homogeneity of variance
 # This is also supported visually by our first boxplot
 # Since the assumptions of this model does not hold we cannot interpret the results of the data.
-# TODO: What do we do then? :(
 
-# Extra
