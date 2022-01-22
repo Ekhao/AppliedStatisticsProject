@@ -52,6 +52,23 @@ sns.stripplot(data=RUL_Pred, x="Source", y="RUL")
 plt.savefig("Figures/OneWayVariance/StripPlot")
 plt.close()
 
+# Histograms for different predictions
+# Actual
+sns.histplot(RUL_Pred["RUL"][RUL_Pred["Source"]=="Actual"])
+plt.savefig("Figures/OnewayVariance/FrequencyPlotActual.png")
+plt.close()
+
+# LSTM
+sns.histplot(RUL_Pred["RUL"][RUL_Pred["Source"]=="LSTM"])
+plt.savefig("Figures/OnewayVariance/FrequencyPlotLSTM.png")
+plt.close()
+
+# Linear
+sns.histplot(RUL_Pred["RUL"][RUL_Pred["Source"]=="Linear"])
+plt.savefig("Figures/OnewayVariance/FrequencyPlotLinear.png")
+plt.close()
+
+
 # The same charts on the log transfored data
 sns.boxplot(data=RUL_Pred, x="Source", y="log_RUL")
 plt.savefig("Figures/OneWayVariance/LogBoxPlot.png")
@@ -75,6 +92,7 @@ print(anova_table)
 # We use a qqplot to check the normality of the data
 stats.probplot(model2.resid, plot=plt)
 plt.savefig("Figures/OneWayVariance/ResidualPlot")
+plt.close()
 # TODO: The qq plot looks a bit off, but lets accept it for now
 
 # We use levenes test to check the homogenity of variances
